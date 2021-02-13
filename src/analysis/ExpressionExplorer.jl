@@ -391,6 +391,13 @@ function explore!(ex::Expr, scopestate::ScopeState)::SymbolsState
         end
 
         return explore!(new_ex, scopestate)
+    elseif ex.head == :do
+        if length(ex.args) > 1 && ex.args[1].head == :call
+            explore!(Expr(:call, ex.args[1].args..., ex.args[2:end]...), scopestate)
+        else
+            @warn "unkown `do` expression: $ex"
+            return scopestate
+        end
     elseif ex.head == :call
         # Does not create scope
 

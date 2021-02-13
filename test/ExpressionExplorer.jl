@@ -123,6 +123,9 @@ Some of these @test_broken lines are commented out to prevent printing to the te
         @test testee(:(for k in 1:n; k + s; end), [:n, :s], [], [:+, :(:)], [])
         @test testee(:(for k in 1:2, r in 3:4; global z = k + r; end), [], [:z], [:+, :(:)], [])
         @test testee(:(while k < 2; r = w; global z = k + r; end), [:k, :w], [:z], [:+, :(<)], [])
+        @test testee(:(sum(x) do xi; xi * 2 * y; end), [:x], [], [[:sum]], [
+            :anon => ([:y], [], [:*], [])
+        ])
     end
     @testset "`try` & `catch`" begin
         @test testee(:(try a = b + 1 catch; end), [:b], [], [:+], [])
